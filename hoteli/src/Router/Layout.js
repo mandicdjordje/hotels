@@ -1,25 +1,39 @@
 import { Outlet, Link } from 'react-router-dom';
-
+import React, { useState } from 'react';
+import HomePage from './Pages/HomePage';
+import LogIn from './AuthPages/LogIn';
+import Register from './AuthPages/Register';
+import { Menu } from 'antd';
+const items = [
+  {
+    label: 'Pocetna',
+    key: 'mail',
+  },
+  {
+    label: 'Registruj Se',
+    key: 'register',
+  },
+  {
+    label: 'Log In',
+    key: 'logIn',
+  },
+];
 const Layout = () => {
+  const [current, setCurrent] = useState('mail');
+  const onClick = (e) => {
+    console.log('click ', e);
+    setCurrent(e.key);
+  };
   return (
     <>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/logIn">LogIn</Link>
-          </li>
-          <li>
-            <Link to="/register">Register</Link>
-          </li>
-        </ul>
-      </nav>
-
+      <Menu
+        onClick={onClick}
+        selectedKeys={[current]}
+        mode="horizontal"
+        items={items}
+      />
       <Outlet />
     </>
   );
 };
-
 export default Layout;

@@ -5,6 +5,7 @@ import Register from './AuthPages/Register';
 import Layout from './Layout';
 
 export default function Router() {
+
   return (
     <BrowserRouter>
       <Routes>

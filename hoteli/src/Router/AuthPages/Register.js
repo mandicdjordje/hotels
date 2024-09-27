@@ -1,172 +1,155 @@
 import { useState } from 'react';
-import { IoEye } from 'react-icons/io5';
+import React from 'react';
+
+import { Button, Checkbox, Form, Input } from 'antd';
 import './AuthCss.css';
+import register from './hooks/register';
 
-const validateEmail = (email) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
-
-const PasswordErrorMessage = () => {
-  return (
-    <p className="FieldError">Password should have at least 8 characters</p>
-  );
-};
 export default function Register() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState({
-    value: '',
-    isTouched: false,
-  });
-  const [password2, setPassword2] = useState({
-    value: '',
-    isTouched: false,
-  });
-  const [passwordShow, setPasswordShow] = useState({
-    password,
-    showPassword: false,
-  });
-
-  const [passwordShow2, setPasswordShow2] = useState({
-    password,
-    showPassword: false,
-  });
-
-  const getIsFormValid = () => {
-    return (
-      firstName &&
-      validateEmail(email) &&
-      password.value.length >= 8 &&
-      password.value === password2.value
+  const onFinish = async (values) => {
+    const { firstName, lastName, email, password } = values;
+    const { isSuccess, message } = await register(
+      firstName,
+      lastName,
+      email,
+      password
     );
-  };
 
-  const clearForm = () => {
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword({
-      value: '',
-      isTouched: false,
-    });
-    setPassword2({
-      value: '',
-      isTouched: false,
-    });
+    if (isSuccess === true) {
+      alert('Uspesno ste se Registrovali');
+    } else {
+      alert('Uneti email je zauzet');
+    }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(firstName);
-    alert('Account created!');
-    clearForm();
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
   };
 
   return (
     <div
       style={{
         display: 'flex',
-        alignItems: 'center',
+        alignContent: 'center',
         justifyContent: 'center',
       }}
     >
-      <form onSubmit={handleSubmit} style={{ width: '500px' }}>
-        <fieldset>
-          <div>
-            <h2>Sign Up</h2>
-            <div className="input-icon-container">
-              <label>
-                First name <sup>*</sup>
-              </label>
-              <input
-                value={firstName}
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
-                placeholder="First name"
-              />
-            </div>
-            <div className="input-icon-container">
-              <label>Last name</label>
-              <input
-                value={lastName}
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
-                placeholder="Last name"
-              />
-            </div>
-            <div className="input-icon-container">
-              <label>
-                Email address <sup>*</sup>
-              </label>
-              <input
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                placeholder="Email address"
-              />
-            </div>
-            <div className="input-icon-container">
-              <label>
-                Password <sup>*</sup>
-              </label>
-              <input
-                style={{
-                  display: 'inline-block',
-                }}
-                value={password.value}
-                type="password"
-                onChange={(e) => {
-                  setPassword({ ...password, value: e.target.value });
-                }}
-                onBlur={() => {
-                  setPassword({ ...password, isTouched: true });
-                }}
-                placeholder="Password"
-              />
-              <IoEye className="icon-eye" />
-              {password.isTouched && password.value.length < 8 ? (
-                <PasswordErrorMessage />
-              ) : null}
-            </div>
-            <div className="input-icon-container">
-              <label>
-                Repeat Password <sup>*</sup>
-              </label>
-              <input
-                value={password2.value}
-                type="password"
-                onChange={(e) => {
-                  setPassword2({ ...password2, value: e.target.value });
-                }}
-                onBlur={() => {
-                  setPassword2({ ...password2, isTouched: true });
-                }}
-                placeholder="Password"
-              />
+      <Form
+        name="basic"
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 16,
+        }}
+        style={{
+          width: 1200,
+          // alignSelf: 'center',
+          // justifySelf: 'center',
+        }}
+        initialValues={{
+          remember: true,
+          email: '',
+          password: '',
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="First Name"
+          name="firstName"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your First Name!',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Last Name"
+          name="lastName"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Last Name!',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-              {password2.isTouched && password2.value.length < 8 ? (
-                <PasswordErrorMessage />
-              ) : null}
-            </div>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your email!',
+            },
+            {
+              type: 'email',
+              message: 'Please input valid mail',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your password!',
+            },
+            {
+              min: 8,
+              message: 'Minimun 8 characters',
+            },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item
+          label="Repeat Password"
+          name="password2"
+          dependencies={['password']}
+          rules={[
+            {
+              required: true,
+            },
+            {
+              min: 8,
+              message: 'Minimun 8 characters',
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('The new password that you entered do not match!')
+                );
+              },
+            }),
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
 
-            <button
-              type="submit"
-              style={{ cursor: 'pointer' }}
-              disabled={!getIsFormValid()}
-            >
-              Create account
-            </button>
-          </div>
-        </fieldset>
-      </form>
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 }
