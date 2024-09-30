@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Button, Checkbox, Form, Input } from 'antd';
 import './AuthCss.css';
-import register from './hooks/register';
+import register from './api-s/register';
 
 export default function Register() {
   const onFinish = async (values) => {
@@ -43,8 +43,6 @@ export default function Register() {
         }}
         style={{
           width: 1200,
-          // alignSelf: 'center',
-          // justifySelf: 'center',
         }}
         initialValues={{
           remember: true,

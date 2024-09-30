@@ -1,27 +1,41 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import HomePage from './Pages/HomePage';
-import LogIn from './AuthPages/LogIn';
-import Register from './AuthPages/Register';
+import {
+  HomeOutlined,
+  PlusCircleOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+} from '@ant-design/icons';
 import { Menu } from 'antd';
 const items = [
   {
     label: 'Pocetna',
-    key: 'mail',
+    key: '/homePage',
+    icon: <HomeOutlined />,
   },
   {
     label: 'Registruj Se',
-    key: 'register',
+    key: '/register',
+    icon: <PlusCircleOutlined />,
   },
   {
     label: 'Log In',
-    key: 'logIn',
+    key: '/logIn',
+    icon: <LoginOutlined />,
+  },
+  {
+    label: 'Sign Out',
+    key: '/signOut',
+    icon: <LogoutOutlined />,
+    danger: true,
   },
 ];
 const Layout = () => {
   const [current, setCurrent] = useState('mail');
+  const navigate = useNavigate();
   const onClick = (e) => {
     console.log('click ', e);
+    navigate(e.key);
     setCurrent(e.key);
   };
   return (

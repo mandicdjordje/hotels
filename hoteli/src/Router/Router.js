@@ -10,9 +10,10 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="logIn" element={<LogIn />} />
-          <Route path="register" element={<Register />} />
+          <Route path='/homePage' index element={<HomePage />} />
+          <Route path="/logIn" element={<LogIn />} />
+          <Route path="/register" element={<Register />} />
+          <Route path='/logOut'></Route>
         </Route>
       </Routes>
     </BrowserRouter>
