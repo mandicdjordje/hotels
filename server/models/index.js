@@ -24,7 +24,12 @@ sequelize
     console.log('Error' + err);
   });
 
+// IMPORTOVANJE MODELA
 db.korisnik = require('./UserModel')(sequelize, DataTypes);
+db.hotel = require('./HotelModel')(sequelize, DataTypes);
+db.hotel_facilities = require('./HotelFacilitiesModel')(sequelize, DataTypes);
+db.room = require('./RoomModel')(sequelize, DataTypes);
+db.room_accessories = require('./RoomAccessoriesModel')(sequelize, DataTypes);
 
 db.sequelize
   .sync()

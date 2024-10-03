@@ -18,9 +18,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 'two_bed_room',
         allowNull: false,
       },
+      price: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+      },
       rating: {
         type: DataTypes.INTEGER,
-        
       },
     },
     { freezeTableName: true }
