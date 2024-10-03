@@ -42,7 +42,7 @@ export default function Register() {
           span: 16,
         }}
         style={{
-          width: 1200,
+          width: 800,
         }}
         initialValues={{
           remember: true,

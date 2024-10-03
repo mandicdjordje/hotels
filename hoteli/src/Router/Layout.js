@@ -34,7 +34,6 @@ const Layout = () => {
   const [current, setCurrent] = useState('mail');
   const navigate = useNavigate();
   const onClick = (e) => {
-    console.log('click ', e);
     navigate(e.key);
     setCurrent(e.key);
   };
