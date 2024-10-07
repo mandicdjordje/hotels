@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, Op } = require('sequelize');
+const { Sequelize, DataTypes, Op, DATE } = require('sequelize');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
@@ -30,6 +30,8 @@ db.hotel = require('./HotelModel')(sequelize, DataTypes);
 db.hotel_facilities = require('./HotelFacilitiesModel')(sequelize, DataTypes);
 db.room = require('./RoomModel')(sequelize, DataTypes);
 db.room_accessories = require('./RoomAccessoriesModel')(sequelize, DataTypes);
+db.location = require('./LocationModel')(sequelize, DataTypes);
+db.hotel_event_space = require('./HotelEventSpaceModel')(sequelize, DataTypes);
 
 db.sequelize
   .sync()
@@ -53,5 +55,67 @@ db.korisnik.prototype.comparePassword = async function (canditatePassword) {
   const isMatch = await bcrypt.compare(canditatePassword, this.password);
   return isMatch;
 };
+
+// Veze izmedju modela
+
+db.hotel.hasMany(db.room, {
+  foreignKey: 'hotel_id',
+});
+db.room.belongsTo(db.hotel, {
+  foreignKey: 'hotel_id',
+});
+
+db.location.hasOne(db.hotel, {
+  foreignKey: {
+    name: 'location_id',
+  },
+});
+db.hotel.belongsTo(db.location, {
+  foreignKey: {
+    name: 'location_id',
+  },
+});
+
+db.korisnik.hasMany(db.hotel, {
+  foreignKey: 'admin_id',
+});
+db.hotel.belongsTo(db.korisnik, {
+  foreignKey: 'admin_id',
+});
+
+db.hotel.hasOne(db.hotel_facilities, {
+  foreignKey: {
+    name: 'hotel_id',
+  },
+});
+db.hotel_facilities.belongsTo(db.hotel, {
+  foreignKey: {
+    name: 'hotel_id',
+  },
+});
+
+db.room.hasOne(db.room_accessories, {
+  foreignKey: {
+    name: 'room_id',
+    allowNull: false,
+  },
+});
+db.room_accessories.belongsTo(db.room, {
+  foreignKey: {
+    name: 'room_id',
+    allowNull: false,
+  },
+});
+
+db.hotel_facilities.hasOne(db.hotel_event_space, {
+  foreignKey: {
+    name: 'facilitie_id',
+  },
+});
+db.hotel_event_space.belongsTo(db.hotel_facilities, {
+  foreignKey: {
+    name: 'facilitie_id',
+  },
+});
 
 module.exports = db;
