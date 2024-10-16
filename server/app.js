@@ -8,10 +8,15 @@ const cors = require('cors');
 
 app.use(cors());
 app.use(bodyParser.json());
-const authRouter = require('./routes/authRoute');
+
+const authRoute = require('./routes/authRoute');
+const userRoute = require('./routes/userRoute');
+const hotelRoute = require('./routes/hotelRoute');
 
 // Routes
-app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/user', userRoute);
+app.use('/api/v1/hotel', hotelRoute);
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode);

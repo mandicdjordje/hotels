@@ -15,13 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      addres: {
+      address: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       postalCode: {
         type: DataTypes.STRING,
-        allowNull: true,
       },
     },
     { freezeTableName: true }
