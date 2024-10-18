@@ -9,15 +9,19 @@ module.exports = (sequelize, DataTypes) => {
       },
       tv: {
         type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
       bedside_lamp: {
         type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
       alarm_clocks: {
         type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
       television: {
         type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
       mini_bar: {
         type: DataTypes.BOOLEAN,

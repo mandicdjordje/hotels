@@ -98,33 +98,42 @@ const removeAdmin = async (req, res) => {
   res.status(200).json({ message: 'Uspesno uklonjen admin' });
 };
 
-const prikaziSveAdmine = async (req, res) => {
-  // const adminiHotela = await db.korisnik.findAll({
-  //   where: { role: 'ADMIN_HOTEL' },
-  // });
-
-  const hoteli = await db.hotel.findAll({
-    where: {
-      admin_id: {
-        [Op.ne]: null,
+const prikaziSveAdmineSaHotelima = async (req, res) => {
+  let hoteli;
+  try {
+    hoteli = await db.hotel.findAll({
+      where: {
+        admin_id: {
+          [Op.ne]: null,
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    res.status(400).json({ message: 'Trenutno nem admina' });
+  }
 
+  let hoteliSaAdminom = {};
+  let Admin;
+  let hotelSaAdminom;
+  for (let i = 0; i < hoteli.length; i++) {
+    try {
+      Admin = await db.korisnik.findOne({
+        where: { user_id: hoteli[i].admin_id },
+      });
+    } catch (error) {
+      res.status(400).json({ message: 'nema Admina' });
+    }
+    let hotel = hoteli[i];
 
-  let hoteliSaAdminom = {}
-  do {
-    let hotelSaAdminom
+    hotelSaAdminom = { Admin, hotel };
 
+    hoteliSaAdminom[i] = hotelSaAdminom;
+  }
 
-  } while (hoteli > 0);
+  console.log(hoteliSaAdminom);
 
-  // await db.korisnik.findOne({ where: { user_id: hotel.admin_id } })
-
-  
-  
-
-  res.status(200).json({ hoteli });
+  res.status(200).json({ hoteliSaAdminom });
 };
 
-module.exports = { createHotelAdmin, removeAdmin, prikaziSveAdmine };
+
+module.exports = { createHotelAdmin, removeAdmin, prikaziSveAdmineSaHotelima };

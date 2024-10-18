@@ -4,7 +4,7 @@ const router = express.Router();
 const {
   createHotelAdmin,
   removeAdmin,
-  prikaziSveAdmine,
+  prikaziSveAdmineSaHotelima,
 } = require('../controllers/userController');
 const {
   authenticateUser,
@@ -29,7 +29,7 @@ router.get(
   '/getAllAdmins',
   authenticateUser,
   authorizePermissions('ADMIN_ROOT'),
-  prikaziSveAdmine
+  prikaziSveAdmineSaHotelima
 );
 
 module.exports = router;

@@ -12,11 +12,13 @@ app.use(bodyParser.json());
 const authRoute = require('./routes/authRoute');
 const userRoute = require('./routes/userRoute');
 const hotelRoute = require('./routes/hotelRoute');
+const roomRouter = require('./routes/roomRoute');
 
 // Routes
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/hotel', hotelRoute);
+app.use('/api/v1/room', roomRouter);
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode);
