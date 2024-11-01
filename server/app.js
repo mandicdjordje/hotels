@@ -13,12 +13,13 @@ const authRoute = require('./routes/authRoute');
 const userRoute = require('./routes/userRoute');
 const hotelRoute = require('./routes/hotelRoute');
 const roomRouter = require('./routes/roomRoute');
-
+const reservationRouter = require('./routes/reservationRoute');
 // Routes
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/hotel', hotelRoute);
 app.use('/api/v1/room', roomRouter);
+app.use('/api/v1/reservation', reservationRouter);
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode);

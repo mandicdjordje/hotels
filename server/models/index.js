@@ -32,6 +32,7 @@ db.room = require('./RoomModel')(sequelize, DataTypes);
 db.room_accessories = require('./RoomAccessoriesModel')(sequelize, DataTypes);
 db.location = require('./LocationModel')(sequelize, DataTypes);
 db.hotel_event_space = require('./HotelEventSpaceModel')(sequelize, DataTypes);
+db.reservation = require(`./ReservationModel`)(sequelize, DataTypes);
 
 db.sequelize
   .sync()
@@ -81,6 +82,20 @@ db.korisnik.hasMany(db.hotel, {
 });
 db.hotel.belongsTo(db.korisnik, {
   foreignKey: 'admin_id',
+});
+
+db.korisnik.hasMany(db.reservation, {
+  foreignKey: 'user_id',
+});
+db.reservation.belongsTo(db.korisnik, {
+  foreignKey: `user_id`,
+});
+
+db.room.hasMany(db.reservation, {
+  foreignKey: 'room_id',
+});
+db.reservation.belongsTo(db.room, {
+  foreignKey: `room_id`,
 });
 
 db.hotel.hasOne(db.hotel_facilities, {
