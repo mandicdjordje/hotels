@@ -6,13 +6,18 @@ const {
   authorizePermissions,
 } = require('../middleware/authentification');
 
-const { createReservation } = require('../controllers/reservationController');
+const {
+  createReservation,
+  getAllReservations,
+} = require('../controllers/reservationController');
 
 router.post(
   '/create/:room_id',
   authenticateUser,
-  authorizePermissions('USER'),
+  authorizePermissions('USER', 'ADMIN_HOTELA'),
   createReservation
 );
+
+router.get('/getAll', getAllReservations);
 
 module.exports = router;
