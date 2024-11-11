@@ -2,7 +2,7 @@ const db = require('../models/index');
 const CustomError = require('../errors/index');
 
 const createRoom = async (req, res) => {
-  const { type, price, rating } = req.body.room;
+  const { type, price, rating, room_number } = req.body.room;
 
   let hotel;
   try {
@@ -29,9 +29,8 @@ const createRoom = async (req, res) => {
     price,
     rating,
     hotel_id: hotel.hotel_id,
+    room_number,
   });
-
-  // res.status(200).json({ hotel });
 
   res.status(200).json({ kreiranaSoba });
 };

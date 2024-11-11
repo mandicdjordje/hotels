@@ -29,8 +29,6 @@ const createReservation = async (req, res) => {
     },
   });
 
-  console.log('blablabla', existingReservationsIninterval);
-
   if (existingReservationsIninterval?.length) {
     return res.status(400).json({
       message: 'Nije uspesna rezervacija sobe jer je soba vec rezervisana',
@@ -79,4 +77,36 @@ const getAllReservations = async (req, res) => {
   res.status(200).json({ rezervacije });
 };
 
-module.exports = { createReservation, getAllReservations };
+const getHotelReservations = async (req, res) => {
+  const hotel_id = req.params.hotel_id;
+
+  let rooms = await db.room.findAll({ where: { hotel_id: hotel_id } });
+
+  if (!rooms.length) {
+    res.status(404).json({ message: 'Hotel nema soba' });
+  }
+
+  let reservationForHotel = [];
+
+  for (let i = 0; i < rooms.length; i++) {
+    let rezervacijeZaSobu = await db.reservation.findAll({
+      where: {
+        room_id: rooms[i].room_id,
+      },
+    });
+
+    if (rezervacijeZaSobu.length) {
+      reservationForHotel.push(rezervacijeZaSobu);
+    }
+  }
+
+  console.log(reservationForHotel);
+
+  res.status(200).json({ reservationForHotel });
+};
+
+module.exports = {
+  createReservation,
+  getAllReservations,
+  getHotelReservations,
+};

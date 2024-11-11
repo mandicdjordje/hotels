@@ -9,6 +9,7 @@ const {
 const {
   createReservation,
   getAllReservations,
+  getHotelReservations,
 } = require('../controllers/reservationController');
 
 router.post(
@@ -19,5 +20,7 @@ router.post(
 );
 
 router.get('/getAll', getAllReservations);
+
+router.get('/hotel/getAll/:hotel_id', getHotelReservations);
 
 module.exports = router;

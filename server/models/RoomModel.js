@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      room_number: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       type: {
         type: DataTypes.ENUM([
           'one_bed_room',
@@ -27,7 +31,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    { freezeTableName: true }
+    {
+      freezeTableName: true,
+      indexes: [
+        {
+          unique: true,
+          fields: ['hotel_id', 'room_number'],
+        },
+      ],
+    }
   );
   return Room;
 };
