@@ -40,7 +40,6 @@ const login = async (req, res) => {
   if (!user) {
     throw new CustomError.UnauthenticatedError('User does not exist');
   }
-
   const isPasswordCorrect = await bcript.compare(password, user.password);
 
   if (!isPasswordCorrect) {

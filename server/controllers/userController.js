@@ -135,5 +135,38 @@ const prikaziSveAdmineSaHotelima = async (req, res) => {
   res.status(200).json({ hoteliSaAdminom });
 };
 
+const findByNameAndLastName = async (req, res) => {
+  const { firstName, lastName } = res.body;
 
-module.exports = { createHotelAdmin, removeAdmin, prikaziSveAdmineSaHotelima };
+  if (firstName.length <= 3 && lastName.length <= 3) {
+    res
+      .status(400)
+      .json({ message: 'Unesite minimalno 3 slova za ime Korsnika i prezime' });
+  }
+
+  const Users = await db.korisnik.findAll({
+    where: {
+      [Op.or]: {
+        firstName: {
+          [Op.like]: `%${firstName}%`,
+        },
+        lastName: {
+          [Op.like]: `%${firstName}%`,
+        },
+      },
+    },
+  });
+
+  if (Users.length === 0) {
+    res.status(400).json({ message: 'Nije Nadjen nikakav Korisnik' });
+  }
+
+  res.status(200).json({ Users });
+};
+
+module.exports = {
+  createHotelAdmin,
+  removeAdmin,
+  prikaziSveAdmineSaHotelima,
+  findByNameAndLastName,
+};

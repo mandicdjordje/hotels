@@ -11,7 +11,7 @@ export default function Register() {
     localStorage.setItem('token', response.token);
   };
   const onFinishFailed = () => {
-    console.log('AAAAA');
+    alert('Nije uspesno logovanje');
   };
 
   return (

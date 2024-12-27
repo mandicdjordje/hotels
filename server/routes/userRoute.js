@@ -5,6 +5,7 @@ const {
   createHotelAdmin,
   removeAdmin,
   prikaziSveAdmineSaHotelima,
+  findByNameAndLastName,
 } = require('../controllers/userController');
 const {
   authenticateUser,
@@ -30,6 +31,13 @@ router.get(
   authenticateUser,
   authorizePermissions('ADMIN_ROOT'),
   prikaziSveAdmineSaHotelima
+);
+
+router.get(
+  '/getAdminsByFirstNameAndLastName',
+  authenticateUser,
+  authorizePermissions('ADMIN_ROOT'),
+  findByNameAndLastName
 );
 
 module.exports = router;

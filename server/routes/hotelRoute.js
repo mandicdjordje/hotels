@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { createHotel, getAllHotels } = require('../controllers/hotelController');
+const {
+  createHotel,
+  getAllHotels,
+  getHotelsbyName,
+} = require('../controllers/hotelController');
 
 const {
   authenticateUser,
@@ -15,5 +19,11 @@ router.post(
   createHotel
 );
 router.get('/getAll', getAllHotels);
+router.get(
+  '/byName',
+  authenticateUser,
+  authorizePermissions('ADMIN_ROOT'),
+  getHotelsbyName
+);
 
 module.exports = router;

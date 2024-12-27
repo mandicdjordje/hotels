@@ -1,5 +1,6 @@
 const db = require('../models/index');
 const CustomError = require('../errors/index');
+const { Op } = require('sequelize');
 
 const createHotel = async (req, res) => {
   const {
@@ -54,4 +55,33 @@ const getAllHotels = async (req, res) => {
   }
 };
 
-module.exports = { createHotel, getAllHotels };
+const getHotelsbyName = async (req, res) => {
+  const name = req.body.name;
+
+  if (name.length <= 3) {
+    res.status(400).json({ message: 'Unesite minimum 4 karaktera' });
+  }
+
+  console.log('___________________________' + name);
+
+  let hoteli;
+  try {
+    hoteli = await db.hotel.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${name}%`,
+        },
+      },
+    });
+  } catch (e) {
+    res.status(400).json({ message: 'Doslo je do greske prilikom pretrage' });
+  }
+
+  if (hoteli.length === 0) {
+    res.status(400).json({ message: 'Trenutno nema hotela' });
+  }
+
+  res.status(200).json({ hoteli });
+};
+
+module.exports = { createHotel, getAllHotels, getHotelsbyName };

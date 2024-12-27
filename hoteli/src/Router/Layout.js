@@ -5,6 +5,8 @@ import {
   PlusCircleOutlined,
   LoginOutlined,
   LogoutOutlined,
+  UserAddOutlined,
+  UserDeleteOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 const items = [
@@ -12,6 +14,18 @@ const items = [
     label: 'Pocetna',
     key: '/homePage',
     icon: <HomeOutlined />,
+  },
+  {
+    label: 'Create Admin',
+    key: '/createAdmin',
+    icon: <UserAddOutlined />,
+    style: { color: '#4E89FF' },
+  },
+  {
+    label: 'Delete Admin',
+    key: '/deleteAdmin',
+    icon: <UserDeleteOutlined />,
+    danger: true,
   },
   {
     label: 'Registruj Se',
