@@ -1,5 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faHouse } from '@awesome.me/kit-KIT_CODE/icons/classic/solid';
 import {
   HomeOutlined,
   PlusCircleOutlined,
@@ -9,6 +11,7 @@ import {
   UserDeleteOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
+import { HotelIcon } from '../icons';
 const items = [
   {
     label: 'Pocetna',
@@ -26,6 +29,11 @@ const items = [
     key: '/deleteAdmin',
     icon: <UserDeleteOutlined />,
     danger: true,
+  },
+  {
+    label: 'Hotel',
+    key: '/CreateHotel',
+    icon: <HotelIcon  />,
   },
   {
     label: 'Registruj Se',
