@@ -17,6 +17,5 @@ export default async function register(firstName, lastName, email, password) {
       message: error.message,
     };
   }
-
   // return response.json();
 }

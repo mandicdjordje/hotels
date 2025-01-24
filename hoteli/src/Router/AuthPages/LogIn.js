@@ -5,7 +5,7 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import './AuthCss.css';
 import { logIn } from './api-s/logIn';
 
-export default function Register() {
+export default function LogIn() {
   const onFinish = async (value) => {
     const response = await logIn(value);
     localStorage.setItem('token', response.token);
