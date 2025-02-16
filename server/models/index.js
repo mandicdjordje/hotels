@@ -28,7 +28,6 @@ db.korisnik = require('./UserModel')(sequelize, DataTypes);
 db.hotel = require('./HotelModel')(sequelize, DataTypes);
 db.hotel_facilities = require('./HotelFacilitiesModel')(sequelize, DataTypes);
 db.room = require('./RoomModel')(sequelize, DataTypes);
-db.room_accessories = require('./RoomAccessoriesModel')(sequelize, DataTypes);
 db.location = require('./LocationModel')(sequelize, DataTypes);
 db.hotel_event_space = require('./HotelEventSpaceModel')(sequelize, DataTypes);
 db.reservation = require(`./ReservationModel`)(sequelize, DataTypes);
@@ -97,28 +96,13 @@ db.reservation.belongsTo(db.room, {
   foreignKey: `room_id`,
 });
 
-db.hotel.hasOne(db.hotel_facilities, {
-  foreignKey: {
-    name: 'hotel_id',
-  },
+db.hotel.belongsToMany(db.hotel_facilities, {
+  through: 'hotelFacilities',
+  foreignKey: 'hotel_id',
 });
-db.hotel_facilities.belongsTo(db.hotel, {
-  foreignKey: {
-    name: 'hotel_id',
-  },
-});
-
-db.room.hasOne(db.room_accessories, {
-  foreignKey: {
-    name: 'room_id',
-    allowNull: false,
-  },
-});
-db.room_accessories.belongsTo(db.room, {
-  foreignKey: {
-    name: 'room_id',
-    allowNull: false,
-  },
+db.hotel_facilities.belongsToMany(db.hotel, {
+  through: 'hotelFacilities',
+  foreignKey: 'facilitie_id',
 });
 
 db.hotel_facilities.hasOne(db.hotel_event_space, {

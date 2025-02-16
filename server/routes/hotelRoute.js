@@ -5,6 +5,7 @@ const {
   createHotel,
   getAllHotels,
   getHotelsbyName,
+  searchForHotels,
 } = require('../controllers/hotelController');
 
 const {
@@ -25,5 +26,7 @@ router.get(
   authorizePermissions('ADMIN_ROOT'),
   getHotelsbyName
 );
+router.get('/search/:name', searchForHotels);
+
 
 module.exports = router;

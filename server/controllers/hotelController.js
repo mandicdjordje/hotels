@@ -84,4 +84,32 @@ const getHotelsbyName = async (req, res) => {
   res.status(200).json({ hoteli });
 };
 
-module.exports = { createHotel, getAllHotels, getHotelsbyName };
+const searchForHotels = async (req, res) => {
+  const { name } = req.params;
+
+  const hotels = await db.hotel.findAll({
+    where: {
+      name: {
+        [Op.like]: `%${name}%`,
+      },
+    },
+    include: [
+      { model: db.location },
+      { model: db.hotel_facilities, through: { attributes: [] } },
+    ],
+  });
+
+  console.log(name);
+
+  res.status(200).json({ hotels });
+};
+
+
+
+
+module.exports = {
+  createHotel,
+  getAllHotels,
+  getHotelsbyName,
+  searchForHotels,
+};
