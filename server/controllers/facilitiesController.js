@@ -6,7 +6,7 @@ const getFacilities = async (req, res) => {
   console.log(`----------------------${type}`);
 
   try {
-    facilities = await db.hotel_facilities.findAll({
+    facilities = await db.facilities.findAll({
       where: {
         type: type,
       },

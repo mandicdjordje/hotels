@@ -26,7 +26,7 @@ sequelize
 // IMPORTOVANJE MODELA
 db.korisnik = require('./UserModel')(sequelize, DataTypes);
 db.hotel = require('./HotelModel')(sequelize, DataTypes);
-db.hotel_facilities = require('./HotelFacilitiesModel')(sequelize, DataTypes);
+db.facilities = require('./HotelFacilitiesModel')(sequelize, DataTypes);
 db.room = require('./RoomModel')(sequelize, DataTypes);
 db.location = require('./LocationModel')(sequelize, DataTypes);
 db.hotel_event_space = require('./HotelEventSpaceModel')(sequelize, DataTypes);
@@ -96,21 +96,21 @@ db.reservation.belongsTo(db.room, {
   foreignKey: `room_id`,
 });
 
-db.hotel.belongsToMany(db.hotel_facilities, {
+db.hotel.belongsToMany(db.facilities, {
   through: 'hotelFacilities',
   foreignKey: 'hotel_id',
 });
-db.hotel_facilities.belongsToMany(db.hotel, {
+db.facilities.belongsToMany(db.hotel, {
   through: 'hotelFacilities',
   foreignKey: 'facilitie_id',
 });
 
-db.hotel_facilities.hasOne(db.hotel_event_space, {
+db.facilities.hasOne(db.hotel_event_space, {
   foreignKey: {
     name: 'facilitie_id',
   },
 });
-db.hotel_event_space.belongsTo(db.hotel_facilities, {
+db.hotel_event_space.belongsTo(db.facilities, {
   foreignKey: {
     name: 'facilitie_id',
   },

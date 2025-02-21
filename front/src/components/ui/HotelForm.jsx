@@ -7,16 +7,21 @@ const { Option } = Select;
 const HotelForm = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [hotelFacilities, setHotelFacilities] = useState([]);
-
+  const [page, setPage] = useState(1);
   const handleChange = (values) => {
     console.log('Selected values:', values);
     setSelectedItems(values);
   };
+  console.log(hotelFacilities);
 
   const fetchHotels = async () => {
     try {
-      const data = await getFacilities({ type: 'hotel' });
-      setHotelFacilities(data.data.facilities);
+      const response = await getFacilities({
+        page: page,
+        pageSize: 10,
+        type: 'hotel',
+      });
+      setHotelFacilities([...hotelFacilities, ...response.data.data]);
     } catch (error) {
       console.error(error);
     }
@@ -24,7 +29,7 @@ const HotelForm = () => {
 
   useEffect(() => {
     fetchHotels();
-  }, []);
+  }, [page]);
 
   console.log(hotelFacilities);
 
@@ -90,10 +95,13 @@ const HotelForm = () => {
           placeholder="Select options"
           onChange={handleChange}
           value={selectedItems}
+          onPopupScroll={() => {
+            setPage(page + 1);
+          }}
         >
-          {hotelFacilities.map((item) => (
-            <Option key={item.facilitie_id} value={item.name}>
-              {item.name}
+          {hotelFacilities.map((facility) => (
+            <Option key={facility.facilitie_id} value={facility.name}>
+              {facility.name}
             </Option>
           ))}
         </Select>

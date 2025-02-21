@@ -95,7 +95,7 @@ const searchForHotels = async (req, res) => {
     },
     include: [
       { model: db.location },
-      { model: db.hotel_facilities, through: { attributes: [] } },
+      { model: db.facilities, through: { attributes: [] } },
     ],
   });
 
@@ -103,9 +103,6 @@ const searchForHotels = async (req, res) => {
 
   res.status(200).json({ hotels });
 };
-
-
-
 
 module.exports = {
   createHotel,

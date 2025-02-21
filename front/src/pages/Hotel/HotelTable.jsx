@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -13,6 +13,7 @@ import {
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { getHotels, searchHotel } from '../../apis/hotel-api-s';
 import { current } from '@reduxjs/toolkit';
+import { debounce } from 'lodash';
 
 const HotelTable = () => {
   const [fixedTop, setFixedTop] = useState(false);
@@ -49,15 +50,14 @@ const HotelTable = () => {
 
   useEffect(() => {
     fetchHotels();
-  }, [pagination]);
+  }, [pagination, searchText]);
 
-  useEffect(() => {
-    setPagination((prev) => ({
-      ...prev,
-      current: 1,
-    }));
-    fetchHotels();
-  }, [searchText]);
+  const handleSearch = useCallback(
+    debounce((value) => {
+      setSearchText(value);
+    }, 500),
+    []
+  );
 
   console.log(hotels);
   const onChangleHandler = async (tablePagination) => {
@@ -138,7 +138,7 @@ const HotelTable = () => {
           style={{ marginBottom: 20, width: 300 }}
           placeholder="Search for hotel"
           onChange={(e) => {
-            setSearchText(e.target.value);
+            handleSearch(e.target.value);
           }}
         />
       </div>
