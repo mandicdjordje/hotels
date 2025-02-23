@@ -16,6 +16,8 @@ const roomRouter = require('./routes/roomRoute');
 const reservationRouter = require('./routes/reservationRoute');
 const pagination = require('./routes/pagination');
 const facilities = require('./routes/facilitiesRoute');
+const location = require('./routes/locationRoute');
+
 // Routes
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
@@ -24,6 +26,7 @@ app.use('/api/v1/room', roomRouter);
 app.use('/api/v1/reservation', reservationRouter);
 app.use('/api/v1/pagination', pagination);
 app.use('/api/v1/facilities', facilities);
+app.use('/api/v1/location', location);
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode);

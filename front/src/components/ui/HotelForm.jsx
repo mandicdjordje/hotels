@@ -13,7 +13,6 @@ const HotelForm = () => {
 
   const [page, setPage] = useState(1);
   const handleChange = (values) => {
-    console.log('Selected values:', values);
     setSelectedItems(values);
   };
   // console.log(hotelFacilities);
@@ -38,10 +37,6 @@ const HotelForm = () => {
   useEffect(() => {
     fetchHotels();
   }, [page]);
-
-  console.log(hotelFacilities);
-
-  console.log(hotelFacilities);
 
   const layout = {
     labelCol: {

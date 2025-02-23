@@ -19,6 +19,7 @@ const SideMeni = ({ collapsed }) => {
         theme="dark"
         mode="inline"
         defaultSelectedKeys={['1']}
+        style={{ height: '100%', minHeight: '100vh' }}
         selectedKeys={selectedKey}
         onClick={({ key }) => setSelectedKey(key)}
         items={[
