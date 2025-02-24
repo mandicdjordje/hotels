@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button, Form, Input, InputNumber, Select } from 'antd';
 import { getFacilities } from '../../apis/hotel-api-s';
 
@@ -6,17 +6,29 @@ const { Option } = Select;
 
 const HotelForm = () => {
   const [selectedItems, setSelectedItems] = useState([]);
-  const [hotelFacilities, setHotelFacilities] = useState([]);
+  const [hotelFacilities, setHotelFacilities] = useState({
+    count: 0,
+    data: [],
+  });
 
+  const [page, setPage] = useState(1);
   const handleChange = (values) => {
-    console.log('Selected values:', values);
     setSelectedItems(values);
   };
+  // console.log(hotelFacilities);
 
   const fetchHotels = async () => {
     try {
-      const data = await getFacilities({ type: 'hotel' });
-      setHotelFacilities(data.data.facilities);
+      const response = await getFacilities({
+        page: page,
+        pageSize: 10,
+        type: 'hotel',
+      });
+
+      setHotelFacilities({
+        count: response.data.count,
+        data: [...hotelFacilities.data, ...response.data.data],
+      });
     } catch (error) {
       console.error(error);
     }
@@ -24,9 +36,7 @@ const HotelForm = () => {
 
   useEffect(() => {
     fetchHotels();
-  }, []);
-
-  console.log(hotelFacilities);
+  }, [page]);
 
   const layout = {
     labelCol: {
@@ -90,10 +100,22 @@ const HotelForm = () => {
           placeholder="Select options"
           onChange={handleChange}
           value={selectedItems}
+          onPopupScroll={(e) => {
+            const { target } = e;
+
+            if (
+              target.scrollTop + target.offsetHeight ===
+              target.scrollHeight
+            ) {
+              if (hotelFacilities.data.length < hotelFacilities.count) {
+                setPage(page + 1);
+              }
+            }
+          }}
         >
-          {hotelFacilities.map((item) => (
-            <Option key={item.facilitie_id} value={item.name}>
-              {item.name}
+          {hotelFacilities.data.map((facility) => (
+            <Option key={facility.facilitie_id} value={facility.name}>
+              {facility.name}
             </Option>
           ))}
         </Select>

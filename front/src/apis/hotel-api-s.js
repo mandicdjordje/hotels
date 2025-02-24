@@ -17,7 +17,7 @@ export function getHotels(
   const searchParam = search ? `&search=${search}` : '';
 
   return axios.get(
-    `http://localhost:3001/api/v1/pagination?page=${page}&page_size=${pageSize}${searchParam}`
+    `http://localhost:3001/api/v1/pagination/hotel?page=${page}&page_size=${pageSize}${searchParam}`
   );
 }
 
@@ -25,6 +25,14 @@ export function searchHotel(name) {
   return axios.get(`http://localhost:3001/api/v1/hotel/search/${name}`);
 }
 
-export function getFacilities({ type } = { type: 'hotel' }) {
-  return axios.get(`http://localhost:3001/api/v1/facilities/?type=${type}`);
+// export function getFacilities({ type } = { type: 'hotel' }) {
+//   return axios.get(`http://localhost:3001/api/v1/facilities/?type=${type}`);
+// }
+
+export function getFacilities(
+  { page, pageSize, type } = { page: 1, pageSize: 10, type: 'hotel' }
+) {
+  return axios.get(
+    `http://localhost:3001/api/v1/pagination/facilities?page=${page}&page_size=${pageSize}&type=${type}`
+  );
 }
