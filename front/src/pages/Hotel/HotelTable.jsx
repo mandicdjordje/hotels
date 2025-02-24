@@ -1,23 +1,14 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Switch,
-  Table,
-  Checkbox,
-  CheckboxProps,
-  Input,
-  checkedItems,
-  Grid,
-} from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { getHotels, searchHotel } from '../../apis/hotel-api-s';
-import { current } from '@reduxjs/toolkit';
-import { debounce } from 'lodash';
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Table, Input } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { getHotels, searchHotel } from "../../apis/hotel-api-s";
+import { current } from "@reduxjs/toolkit";
+import { debounce } from "lodash";
 
 const HotelTable = () => {
   const [fixedTop, setFixedTop] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [hotels, setHotels] = useState({ count: 0, data: [] });
   const [filteredData, setFilteredData] = useState(hotels);
   const [loading, setLoading] = useState(false);
@@ -25,7 +16,7 @@ const HotelTable = () => {
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
   const handleClick = () => {
-    navigate('/CreateHotel');
+    navigate("/CreateHotel");
   };
 
   const fetchHotels = async () => {
@@ -62,7 +53,7 @@ const HotelTable = () => {
   console.log(hotels);
   const onChangleHandler = async (tablePagination) => {
     if (tablePagination.pageSize !== pagination.pageSize) {
-      console.log('sss');
+      console.log("sss");
       setPagination({
         ...tablePagination,
         current: 1,
@@ -74,29 +65,29 @@ const HotelTable = () => {
 
   const columns = [
     {
-      title: 'Ime Hotela',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Ime Hotela",
+      dataIndex: "name",
+      key: "name",
       render: (name) => (
-        <strong style={{ letterSpacing: 1, fontSize: 15, color: '	#989898' }}>
+        <strong style={{ letterSpacing: 1, fontSize: 15, color: "	#989898" }}>
           {name}
         </strong>
       ),
     },
     {
-      title: 'Broj Soba',
-      dataIndex: 'number_of_rooms',
-      key: 'number_of_rooms',
+      title: "Broj Soba",
+      dataIndex: "number_of_rooms",
+      key: "number_of_rooms",
       render: (number_of_rooms) => (
-        <strong style={{ letterSpacing: 1, fontSize: 25, color: '	#989898' }}>
+        <strong style={{ letterSpacing: 1, fontSize: 25, color: "	#989898" }}>
           {number_of_rooms}
         </strong>
       ),
     },
     {
-      title: 'Lokacija',
-      dataIndex: 'location',
-      key: 'location',
+      title: "Lokacija",
+      dataIndex: "location",
+      key: "location",
       render: (location) => (
         <>
           <p>
@@ -109,8 +100,8 @@ const HotelTable = () => {
       ),
     },
     {
-      title: 'Action',
-      key: 'operation',
+      title: "Action",
+      key: "operation",
       render: () => (
         <>
           <span>
@@ -130,7 +121,7 @@ const HotelTable = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Button style={{ padding: 20 }} type="primary" onClick={handleClick}>
           Create
         </Button>
@@ -151,11 +142,11 @@ const HotelTable = () => {
           pageSize: pagination.pageSize,
           showSizeChanger: true,
           total: hotels.count,
-          pageSizeOptions: ['5', '10', '15'],
+          pageSizeOptions: ["5", "10", "15"],
         }}
         onChange={(val) => onChangleHandler(val)}
         summary={() => (
-          <Table.Summary fixed={fixedTop ? 'top' : 'bottom'}>
+          <Table.Summary fixed={fixedTop ? "top" : "bottom"}>
             <Table.Summary.Row>
               <Table.Summary.Cell index={2} colSpan={2}></Table.Summary.Cell>
             </Table.Summary.Row>

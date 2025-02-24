@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Button, Form, Input, InputNumber, Select } from 'antd';
-import { getFacilities } from '../../apis/hotel-api-s';
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, InputNumber, Select } from "antd";
+import { getFacilities } from "../../apis/hotel-api-s";
 
 const { Option } = Select;
 
@@ -22,7 +22,7 @@ const HotelForm = () => {
       const response = await getFacilities({
         page: page,
         pageSize: 10,
-        type: 'hotel',
+        type: "hotel",
       });
 
       setHotelFacilities({
@@ -47,13 +47,13 @@ const HotelForm = () => {
     },
   };
   const validateMessages = {
-    required: '${label} is required!',
+    required: "${label} is required!",
     types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
+      email: "${label} is not a valid email!",
+      number: "${label} is not a valid number!",
     },
     number: {
-      range: '${label} must be between ${min} and ${max}',
+      range: "${label} must be between ${min} and ${max}",
     },
   };
   const onFinish = (values) => {
@@ -70,7 +70,7 @@ const HotelForm = () => {
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={['user', 'name']}
+        name={["user", "name"]}
         label="Naziv Hotela"
         rules={[
           {
@@ -81,11 +81,11 @@ const HotelForm = () => {
         <Input />
       </Form.Item>
       <Form.Item
-        name={['user', 'number_rooms']}
+        name={["user", "number_rooms"]}
         label="Broj Soba"
         rules={[
           {
-            type: 'number',
+            type: "number",
             min: 1,
             max: 500,
           },
@@ -93,10 +93,10 @@ const HotelForm = () => {
       >
         <InputNumber />
       </Form.Item>
-      <Form.Item name={['user', 'facilities']} label="Facilities">
+      <Form.Item name={["user", "facilities"]} label="Facilities">
         <Select
           mode="multiple"
-          style={{ width: '300px' }}
+          style={{ width: "300px" }}
           placeholder="Select options"
           onChange={handleChange}
           value={selectedItems}
@@ -120,9 +120,7 @@ const HotelForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name={['user', 'introduction']} label="Location">
-        <Input.TextArea />
-      </Form.Item>
+      <Form.Item name={["user", "introduction"]} label="Location"></Form.Item>
       <Form.Item label={null}>
         <Button type="primary" htmlType="submit">
           Submit
