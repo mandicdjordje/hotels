@@ -1,4 +1,4 @@
-const db = require('../models/index');
+const db = require("../models/index");
 
 const getFacilities = async (req, res) => {
   let facilities;

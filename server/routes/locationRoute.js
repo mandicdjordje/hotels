@@ -1,13 +1,18 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 const {
   authenticateUser,
   authorizePermissions,
-} = require('../middleware/authentification');
+} = require("../middleware/authentification");
 
-const { fetchCountris } = require('../controllers/locationController');
+const {
+  fetchCountris,
+  fecthCitiesFromCountries,
+} = require("../controllers/locationController");
 
-router.get('/countries', fetchCountris);
+router.get("/countries", fetchCountris);
+
+router.get("/cities", fecthCitiesFromCountries);
 
 module.exports = router;

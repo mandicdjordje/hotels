@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Select } from "antd";
 import { getFacilities } from "../../apis/hotel-api-s";
-
+import LocationModal from "./LocationModal";
 const { Option } = Select;
 
 const HotelForm = () => {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [hotelFacilities, setHotelFacilities] = useState({
     count: 0,
     data: [],
   });
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const [page, setPage] = useState(1);
   const handleChange = (values) => {
     setSelectedItems(values);
   };
-  // console.log(hotelFacilities);
 
   const fetchHotels = async () => {
     try {
@@ -120,7 +129,16 @@ const HotelForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name={["user", "introduction"]} label="Location"></Form.Item>
+      <Form.Item name={["user", "introduction"]} label="Location">
+        <Button type="primary" onClick={showModal}>
+          Open Modal
+        </Button>
+        <LocationModal
+          isOpen={isModalOpen}
+          handleOk={handleOk}
+          handleCancel={handleCancel}
+        />
+      </Form.Item>
       <Form.Item label={null}>
         <Button type="primary" htmlType="submit">
           Submit
