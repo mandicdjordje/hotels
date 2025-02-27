@@ -1,30 +1,33 @@
-import { Modal, Form, Input, Select } from "antd";
-import { useState, useCallback } from "react";
-import { getCountries } from "../../apis/hotel-api-s";
-import { debounce } from "lodash";
+import { Modal, Form, Input, Select } from 'antd';
+import { useState, useCallback, useEffect } from 'react';
+import { getCountries } from '../../apis/hotel-api-s';
+import { debounce } from 'lodash';
 const { Option } = Select;
 
 const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
-  const [selectedValue, setSelectedValue] = useState(null);
-
-  const options = [
-    { value: "belgrade", label: "Belgrade" },
-    { value: "novi-sad", label: "Novi Sad" },
-    { value: "nis", label: "Niš" },
-  ];
-
+  const [searchCountryValue, setSearchCountryValue] = useState();
   const handleSearch = useCallback(
     debounce((value) => {
-      console.log("Searching for:", value);
-      setSelectedValue(value);
-    }, 5000),
+      // console.log('Searching for:', value);
+      setSearchCountryValue(value);
+    }, 1000),
     []
   );
+
+  const fetchCountries = async () => {
+    console.log(searchCountryValue);
+    const countries = await getCountries({ name: searchCountryValue });
+    console.log(countries.data);
+  };
+
+  useEffect(() => {
+    fetchCountries();
+  }, [searchCountryValue]);
   return (
     <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel}>
       <Form>
         <Form.Item
-          name={["user", "drzava"]}
+          name={['user', 'drzava']}
           label="Drzava"
           rules={[
             {
@@ -34,24 +37,20 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
         >
           <Select
             showSearch
-            style={{ width: 300 }}
+            style={{ width: 200 }}
             placeholder="Select a city"
             optionFilterProp="children"
-            onChange={handleSearch}
-            filterOption={(input, option) =>
-              option.children.toLowerCase().includes(input.toLowerCase())
-            }
-            value={selectedValue}
-          >
-            {options.map((item) => (
-              <Option key={item.value} value={item.value}>
-                {item.label}
-              </Option>
-            ))}
-          </Select>
+            onSearch={(value) => {
+              console.log(value);
+              handleSearch(value);
+            }}
+            onChange={(value) => {
+              setSearchCountryValue(value);
+            }}
+          ></Select>
         </Form.Item>
         <Form.Item
-          name={["user", "grad"]}
+          name={['user', 'grad']}
           label="Grad"
           rules={[
             {
@@ -62,7 +61,7 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
           <Input />
         </Form.Item>
         <Form.Item
-          name={["user", "adresa"]}
+          name={['user', 'adresa']}
           label="Adresa"
           rules={[
             {
