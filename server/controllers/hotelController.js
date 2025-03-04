@@ -7,7 +7,6 @@ const createHotel = async (req, res) => {
     state = null,
     city = null,
     address = null,
-    postalCode,
   } = req.body.location;
   const { name = null, number_of_rooms = 10 } = req.body.hotel;
 
@@ -25,12 +24,12 @@ const createHotel = async (req, res) => {
   let location;
   let hotel = {};
 
-  if (state && city && address && postalCode && name && number_of_rooms) {
+  if (state && city && address && name && number_of_rooms) {
     location = await db.location.create({
       state,
       city,
       address,
-      postalCode,
+      postalCode: '400108',
     });
     hotel = await db.hotel.create({
       name,

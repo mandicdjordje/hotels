@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
 export function getHotels(
   { page, pageSize, search } = { page: 1, pageSize: 10 }
 ) {
-  const searchParam = search ? `&search=${search}` : "";
+  const searchParam = search ? `&search=${search}` : '';
 
   return axios.get(
     `http://localhost:3001/api/v1/pagination/hotel?page=${page}&page_size=${pageSize}${searchParam}`
@@ -15,15 +15,26 @@ export function searchHotel(name) {
 }
 
 export function getFacilities(
-  { page, pageSize, type } = { page: 1, pageSize: 10, type: "hotel" }
+  { page, pageSize, type } = { page: 1, pageSize: 10, type: 'hotel' }
 ) {
   return axios.get(
     `http://localhost:3001/api/v1/pagination/facilities?page=${page}&page_size=${pageSize}&type=${type}`
   );
 }
 
-export function getCountries({ name }) {
+export function getCountries({ name } = { name: '' }) {
+  const queryString = name ? `?name=${name}` : '';
   return axios.get(
-    `http://localhost:3001/api/v1/location/countries?name=${name}`
+    `http://localhost:3001/api/v1/location/countries${queryString}`
+  );
+}
+
+export function getCitiesFromCountries(
+  { country_code } = { country_code: '' }
+) {
+  const queryString = country_code ? `?country_code=${country_code}` : '';
+
+  return axios.get(
+    `http://localhost:3001/api/v1/location/cities${queryString}`
   );
 }

@@ -1,33 +1,74 @@
 import { Modal, Form, Input, Select } from 'antd';
 import { useState, useCallback, useEffect } from 'react';
-import { getCountries } from '../../apis/hotel-api-s';
+import { getCountries, getCitiesFromCountries } from '../../apis/hotel-api-s';
 import { debounce } from 'lodash';
 const { Option } = Select;
 
 const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
-  const [searchCountryValue, setSearchCountryValue] = useState();
-  const handleSearch = useCallback(
+  const [searchCountryValue, setSearchCountryValue] = useState('');
+  const [formValues, setFormValues] = useState({
+    state: '',
+    city: '',
+    address: '',
+  });
+  const [code, setCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  const handleCountrySearch = useCallback(
     debounce((value) => {
-      // console.log('Searching for:', value);
+      console.log('Searching for:', value);
       setSearchCountryValue(value);
-    }, 1000),
+    }, 500),
     []
   );
 
   const fetchCountries = async () => {
-    console.log(searchCountryValue);
-    const countries = await getCountries({ name: searchCountryValue });
-    console.log(countries.data);
+    if (!searchCountryValue) return;
+    try {
+      setLoading(true);
+      const _countries = await getCountries({ name: searchCountryValue });
+      setCountries(_countries.data.countries);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const fetchCities = async () => {
+    try {
+      const _cities = await getCitiesFromCountries({ country_code: code });
+      setCities(_cities.data.cities);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCities();
+  }, [code]);
 
   useEffect(() => {
     fetchCountries();
   }, [searchCountryValue]);
+
   return (
-    <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel}>
-      <Form>
+    <Modal
+      open={isOpen}
+      onOk={() => {
+        handleOk(formValues);
+      }}
+      onCancel={handleCancel}
+      width={400}
+    >
+      <Form
+        layout="horizontal"
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 14 }}
+      >
         <Form.Item
-          name={['user', 'drzava']}
           label="Drzava"
           rules={[
             {
@@ -36,21 +77,36 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
           ]}
         >
           <Select
+            loading={loading}
             showSearch
             style={{ width: 200 }}
-            placeholder="Select a city"
+            placeholder="Select a countrie"
             optionFilterProp="children"
             onSearch={(value) => {
-              console.log(value);
-              handleSearch(value);
+              handleCountrySearch(value);
             }}
             onChange={(value) => {
-              setSearchCountryValue(value);
+              setFormValues({
+                ...formValues,
+                state: value,
+              });
+
+              const _code = countries.find((c) => c.name === value)?.code || '';
+              setCode(_code);
             }}
-          ></Select>
+          >
+            {countries.map((countrie) => (
+              <Option
+                key={countrie.name}
+                value={countrie.value}
+                label={countrie.name}
+              >
+                {countrie.name}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
-          name={['user', 'grad']}
           label="Grad"
           rules={[
             {
@@ -58,10 +114,25 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
             },
           ]}
         >
-          <Input />
+          <Select
+            showSearch
+            onChange={(value) => {
+              setFormValues({
+                ...formValues,
+                city: value,
+              });
+              console.log(formValues);
+            }}
+            style={{ width: 200 }}
+          >
+            {cities.map((city) => (
+              <Option key={city.name} value={city.name} label={city.name}>
+                {city.name}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
-          name={['user', 'adresa']}
           label="Adresa"
           rules={[
             {
@@ -69,7 +140,15 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
             },
           ]}
         >
-          <Input />
+          <Input
+            style={{ width: 200 }}
+            onChange={(e) => {
+              setFormValues({
+                ...formValues,
+                address: e.target.value,
+              });
+            }}
+          />
         </Form.Item>
       </Form>
     </Modal>
