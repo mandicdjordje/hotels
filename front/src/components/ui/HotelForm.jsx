@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Select } from 'antd';
-import { getFacilities } from '../../apis/hotel-api-s';
+import { getFacilities, CreateHotel } from '../../apis/hotel-api-s';
 import LocationModal from './LocationModal';
 const { Option } = Select;
 
@@ -21,6 +21,7 @@ const HotelForm = () => {
   };
   const handleOk = (location) => {
     console.log(location);
+
     sethotelForm((prevState) => ({
       ...prevState,
       location: { ...prevState.location, ...location },
@@ -30,7 +31,6 @@ const HotelForm = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  console.log(hotelForm);
 
   const [page, setPage] = useState(1);
   const handleChange = (values) => {
@@ -67,18 +67,38 @@ const HotelForm = () => {
     },
   };
   const validateMessages = {
-    required: '${label} is required!',
+    required: '${label} je obavezan!!',
     types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
+      number: '${label} mora biti broj',
     },
     number: {
-      range: '${label} must be between ${min} and ${max}',
+      range: '${label} mora biti izmedju ${min} i ${max}',
     },
   };
-  const onFinish = (values) => {
-    console.log(values);
+
+  const createHotelFunction = async (value) => {
+    try {
+      const hotel = await CreateHotel(value);
+      return console.log(hotel.message);
+    } catch (error) {
+      console.error(console.error());
+    }
   };
+  const onFinish = (values) => {
+    let hotel = values.hotel;
+    sethotelForm((prevState) => ({
+      location: { ...prevState.location },
+      ...prevState,
+      hotel,
+    }));
+
+    console.log(hotelForm);
+  };
+  const isFillModalForm = (form) => {
+    if (form.name) {
+    }
+  };
+
   return (
     <Form
       {...layout}
@@ -90,7 +110,7 @@ const HotelForm = () => {
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={['user', 'name']}
+        name={['hotel', 'name']}
         label="Naziv Hotela"
         rules={[
           {
@@ -101,11 +121,12 @@ const HotelForm = () => {
         <Input style={{ width: 200 }} />
       </Form.Item>
       <Form.Item
-        name={['user', 'number_rooms']}
+        name={['hotel', 'number_rooms']}
         label="Broj Soba"
         rules={[
           {
             type: 'number',
+            required: true,
             min: 1,
             max: 500,
           },
@@ -113,38 +134,57 @@ const HotelForm = () => {
       >
         <InputNumber style={{ width: 200 }} />
       </Form.Item>
-      <Form.Item name={['user', 'facilities']} label="Facilities">
-        <Select
-          mode="multiple"
-          style={{ width: '200px' }}
-          placeholder="Select options"
-          onChange={handleChange}
-          value={selectedItems}
-          onPopupScroll={(e) => {
-            const { target } = e;
+      <Form.Item
+        name={['hotel', 'facilities']}
+        label="Facilities"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <div>
+          <Select
+            mode="multiple"
+            style={{ width: '200px' }}
+            placeholder="Select options"
+            onChange={handleChange}
+            value={selectedItems}
+            onPopupScroll={(e) => {
+              const { target } = e;
 
-            if (
-              target.scrollTop + target.offsetHeight ===
-              target.scrollHeight
-            ) {
-              if (hotelFacilities.data.length < hotelFacilities.count) {
-                setPage(page + 1);
+              if (
+                target.scrollTop + target.offsetHeight ===
+                target.scrollHeight
+              ) {
+                if (hotelFacilities.data.length < hotelFacilities.count) {
+                  setPage(page + 1);
+                }
               }
-            }
-          }}
-        >
-          {hotelFacilities.data.map((facility) => (
-            <Option key={facility.facilitie_id} value={facility.name}>
-              {facility.name}
-            </Option>
-          ))}
-        </Select>
+            }}
+          >
+            {hotelFacilities.data.map((facility) => (
+              <Option key={facility.name} value={facility.name}>
+                {facility.name}
+              </Option>
+            ))}
+          </Select>
+        </div>
       </Form.Item>
-      <Form.Item name={['user', 'introduction']} label="Location">
+      <Form.Item
+        name={['hotel', 'location']}
+        label="Location"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
         <Button type="primary" onClick={showModal}>
-          Open Modal
+          Open Location
         </Button>
         <LocationModal
+          isFilled={isFillModalForm}
           isOpen={isModalOpen}
           handleOk={handleOk}
           handleCancel={handleCancel}

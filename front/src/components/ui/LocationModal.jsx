@@ -4,7 +4,7 @@ import { getCountries, getCitiesFromCountries } from '../../apis/hotel-api-s';
 import { debounce } from 'lodash';
 const { Option } = Select;
 
-const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
+const LocationModal = ({ isOpen, handleOk, handleCancel,isFilled }) => {
   const [searchCountryValue, setSearchCountryValue] = useState('');
   const [formValues, setFormValues] = useState({
     state: '',
@@ -15,6 +15,9 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
   const [loading, setLoading] = useState(false);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
+
+
+  
 
   const handleCountrySearch = useCallback(
     debounce((value) => {
@@ -54,21 +57,33 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
     fetchCountries();
   }, [searchCountryValue]);
 
+  const validateMessages = {
+    required: '${label} je obavezan!!',
+    types: {
+      number: '${label} mora biti broj',
+    },
+    number: {
+      range: '${label} mora biti izmedju ${min} i ${max}',
+    },
+  };
+
   return (
     <Modal
       open={isOpen}
       onOk={() => {
-        handleOk(formValues);
+        handleOk(formValues);     
       }}
       onCancel={handleCancel}
       width={400}
     >
       <Form
+        validateMessages={validateMessages}
         layout="horizontal"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 14 }}
       >
         <Form.Item
+          name={['location', 'county']}
           label="Drzava"
           rules={[
             {
@@ -107,6 +122,7 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
           </Select>
         </Form.Item>
         <Form.Item
+          name={['location', 'city']}
           label="Grad"
           rules={[
             {
@@ -133,6 +149,7 @@ const LocationModal = ({ isOpen, handleOk, handleCancel }) => {
           </Select>
         </Form.Item>
         <Form.Item
+          name={['location', 'address']}
           label="Adresa"
           rules={[
             {

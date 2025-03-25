@@ -3,11 +3,7 @@ const CustomError = require('../errors/index');
 const { Op } = require('sequelize');
 
 const createHotel = async (req, res) => {
-  const {
-    state = null,
-    city = null,
-    address = null,
-  } = req.body.location;
+  const { state = null, city = null, address = null } = req.body.location;
   const { name = null, number_of_rooms = 10 } = req.body.hotel;
 
   const proveraLokacije = await db.location.findOne({
@@ -29,7 +25,6 @@ const createHotel = async (req, res) => {
       state,
       city,
       address,
-      postalCode: '400108',
     });
     hotel = await db.hotel.create({
       name,
@@ -42,7 +37,7 @@ const createHotel = async (req, res) => {
     });
   }
 
-  res.status(201).json({ hotel });
+  res.status(201).json({ message: 'Uspesno kreiran hotel' });
 };
 
 const getAllHotels = async (req, res) => {

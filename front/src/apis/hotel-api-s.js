@@ -38,3 +38,12 @@ export function getCitiesFromCountries(
     `http://localhost:3001/api/v1/location/cities${queryString}`
   );
 }
+
+export function CreateHotel(hotelForm) {
+  console.log(hotelForm);
+
+  return axios.post('http://localhost:3001/api/v1/hotel/createHotel', {
+    hotel: hotelForm.hotel,
+    location: hotelForm.location,
+  });
+}

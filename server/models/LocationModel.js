@@ -19,9 +19,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      postalCode: {
-        type: DataTypes.STRING,
-      },
     },
     { freezeTableName: true }
   );
