@@ -1,32 +1,34 @@
-import { Modal, Form, Input, Select } from 'antd';
-import { useState, useCallback, useEffect } from 'react';
-import { getCountries, getCitiesFromCountries } from '../../apis/hotel-api-s';
-import { debounce } from 'lodash';
+import { Modal, Form, Input, Select } from "antd";
+import { useState, useCallback, useEffect } from "react";
+import { getCountries, getCitiesFromCountries } from "../../apis/hotel-api-s";
+import { debounce } from "lodash";
 const { Option } = Select;
 
-const LocationModal = ({ isOpen, handleOk, handleCancel,isFilled }) => {
-  const [searchCountryValue, setSearchCountryValue] = useState('');
+const LocationModal = ({ isOpen, handleOk, handleCancel, isFilled }) => {
+  const [searchCountryValue, setSearchCountryValue] = useState("");
   const [formValues, setFormValues] = useState({
-    state: '',
-    city: '',
-    address: '',
+    state: "",
+    city: "",
+    address: "",
   });
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
 
-
-  
-
   const handleCountrySearch = useCallback(
     debounce((value) => {
-      console.log('Searching for:', value);
+      console.log("Searching for:", value);
       setSearchCountryValue(value);
     }, 500),
     []
   );
 
+  const checkOk = (formValues) => {
+    if (formValues.state && formValues.city && formValues.address) {
+      return true;
+    } else return false;
+  };
   const fetchCountries = async () => {
     if (!searchCountryValue) return;
     try {
@@ -58,12 +60,12 @@ const LocationModal = ({ isOpen, handleOk, handleCancel,isFilled }) => {
   }, [searchCountryValue]);
 
   const validateMessages = {
-    required: '${label} je obavezan!!',
+    required: "${label} je obavezan!!",
     types: {
-      number: '${label} mora biti broj',
+      number: "${label} mora biti broj",
     },
     number: {
-      range: '${label} mora biti izmedju ${min} i ${max}',
+      range: "${label} mora biti izmedju ${min} i ${max}",
     },
   };
 
@@ -71,7 +73,9 @@ const LocationModal = ({ isOpen, handleOk, handleCancel,isFilled }) => {
     <Modal
       open={isOpen}
       onOk={() => {
-        handleOk(formValues);     
+        if (checkOk(formValues)) {
+          handleOk(formValues);
+        }
       }}
       onCancel={handleCancel}
       width={400}
@@ -83,7 +87,7 @@ const LocationModal = ({ isOpen, handleOk, handleCancel,isFilled }) => {
         wrapperCol={{ span: 14 }}
       >
         <Form.Item
-          name={['location', 'county']}
+          name={["location", "county"]}
           label="Drzava"
           rules={[
             {
@@ -106,7 +110,7 @@ const LocationModal = ({ isOpen, handleOk, handleCancel,isFilled }) => {
                 state: value,
               });
 
-              const _code = countries.find((c) => c.name === value)?.code || '';
+              const _code = countries.find((c) => c.name === value)?.code || "";
               setCode(_code);
             }}
           >
@@ -122,7 +126,7 @@ const LocationModal = ({ isOpen, handleOk, handleCancel,isFilled }) => {
           </Select>
         </Form.Item>
         <Form.Item
-          name={['location', 'city']}
+          name={["location", "city"]}
           label="Grad"
           rules={[
             {
@@ -149,7 +153,7 @@ const LocationModal = ({ isOpen, handleOk, handleCancel,isFilled }) => {
           </Select>
         </Form.Item>
         <Form.Item
-          name={['location', 'address']}
+          name={["location", "address"]}
           label="Adresa"
           rules={[
             {

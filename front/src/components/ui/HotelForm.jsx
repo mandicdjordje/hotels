@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, InputNumber, Select } from 'antd';
-import { getFacilities, CreateHotel } from '../../apis/hotel-api-s';
-import LocationModal from './LocationModal';
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, InputNumber, Select } from "antd";
+import { getFacilities, CreateHotel } from "../../apis/hotel-api-s";
+import LocationModal from "./LocationModal";
 const { Option } = Select;
 
 const HotelForm = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
   const [hotelFacilities, setHotelFacilities] = useState({
     count: 0,
     data: [],
   });
-
+  const [form] = Form.useForm();
+  const [isModalFormFull, setisModalFormFull] = useState(false);
   const [hotelForm, sethotelForm] = useState({
-    location: { state: '', city: '', address: '' },
-    hotel: { name: '', number_of_room: 0 },
+    location: { state: "", city: "", address: "" },
+    hotel: { name: "", number_of_room: 0 },
   });
   const showModal = () => {
     setIsModalOpen(true);
@@ -32,7 +34,6 @@ const HotelForm = () => {
     setIsModalOpen(false);
   };
 
-  const [page, setPage] = useState(1);
   const handleChange = (values) => {
     setSelectedItems(values);
   };
@@ -42,7 +43,7 @@ const HotelForm = () => {
       const response = await getFacilities({
         page: page,
         pageSize: 10,
-        type: 'hotel',
+        type: "hotel",
       });
 
       setHotelFacilities({
@@ -67,12 +68,12 @@ const HotelForm = () => {
     },
   };
   const validateMessages = {
-    required: '${label} je obavezan!!',
+    required: "${label} je obavezan!!",
     types: {
-      number: '${label} mora biti broj',
+      number: "${label} mora biti broj",
     },
     number: {
-      range: '${label} mora biti izmedju ${min} i ${max}',
+      range: "${label} mora biti izmedju ${min} i ${max}",
     },
   };
 
@@ -110,7 +111,7 @@ const HotelForm = () => {
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={['hotel', 'name']}
+        name={["hotel", "name"]}
         label="Naziv Hotela"
         rules={[
           {
@@ -121,11 +122,11 @@ const HotelForm = () => {
         <Input style={{ width: 200 }} />
       </Form.Item>
       <Form.Item
-        name={['hotel', 'number_rooms']}
+        name={["hotel", "number_rooms"]}
         label="Broj Soba"
         rules={[
           {
-            type: 'number',
+            type: "number",
             required: true,
             min: 1,
             max: 500,
@@ -135,7 +136,7 @@ const HotelForm = () => {
         <InputNumber style={{ width: 200 }} />
       </Form.Item>
       <Form.Item
-        name={['hotel', 'facilities']}
+        name={["hotel", "facilities"]}
         label="Facilities"
         rules={[
           {
@@ -146,7 +147,7 @@ const HotelForm = () => {
         <div>
           <Select
             mode="multiple"
-            style={{ width: '200px' }}
+            style={{ width: "200px" }}
             placeholder="Select options"
             onChange={handleChange}
             value={selectedItems}
@@ -172,7 +173,7 @@ const HotelForm = () => {
         </div>
       </Form.Item>
       <Form.Item
-        name={['hotel', 'location']}
+        name={["hotel", "location"]}
         label="Location"
         rules={[
           {
